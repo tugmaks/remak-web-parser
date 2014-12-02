@@ -68,7 +68,7 @@ class RemakConnector {
 
         $o->name = $s[0];
         $o->code = $s[1];
-        $o->error = trim($s[2]);
+        $o->error = str_replace("&nbsp;", "", trim($s[2]));
         $o->type = $s[3];
         $o->remakId = $this->remakId;
         return $o;
@@ -76,13 +76,14 @@ class RemakConnector {
 
     private function detectAlarm($signal) {
         $s = $this->parseSignal($signal);
-        if (count($s) > 3 && $s[2] !== '  ') {
+        $formattedErorr = str_replace("&nbsp;", "", trim($s[2]));
+        if (count($s) > 3 && $formattedErorr !== "") {
             return true;
         }
         return false;
     }
 
-    public function split($separator = '| ') {
+    public function split($separator = "|\n") {
         return explode($separator, $this->response);
     }
 
